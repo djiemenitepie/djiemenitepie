@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STUDENTS 50
+#define MAX_DAYS 5
+#define MAX_SUBJECTS 8
+
+typedef struct {
+    char name[20];
+    int id;
+    int present;
+} Student;
+
+typedef struct {
+    char day[10];
+    char time[10];
+    char subject[50];
+} Timetable;
+
+void generateAttendance(Student students[], int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
+        printf("Is student %s present? (1 for present, 0 for absent): ", students[i].name);
+        scanf("%d", &students[i].present);
+    }
+}
+
+void generateTimetable(Timetable timetable[], int numDays) {
+    char days[MAX_DAYS][10] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    char times[4][10] = {"8:00 AM", "10:00 AM", "1:00 PM", "3:00 PM"};
+    char subjects[MAX_SUBJECTS][50] = {"Math", "hardware maintainance", "web", "programming", "database"};
+
+    for (int i = 0; i < numDays; i++) {
+        strcpy(timetable[i].day, days[i % MAX_DAYS]);
+        strcpy(timetable[i].time, times[i % 4]);
+        printf("Enter the name of the subject for this period: ");
+        scanf("%s", timetable[i].subject);
+    }
+}
+
+int main() {
+    int numStudents;
+
+    printf("Enter the number of students in the class: ");
+    scanf("%d", &numStudents);
+
+    if (numStudents <= 0 || numStudents > MAX_STUDENTS) {
+        printf("Invalid number of students. Please enter a valid number.\n");
+        return 1;
+    }
+
+    Student students[MAX_STUDENTS];
+
+    for (int i = 0; i < numStudents; i++) {
+        printf("Enter the name of student %d: ", i + 1);
+        scanf("%s", students[i].name);
+        students[i].id = i + 1;
+    }
+
+    generateAttendance(students, numStudents);
+
+    int numDays;
+
+    printf("\nEnter the number of days for the timetable: ");
+    scanf("%d", &numDays);
+
+    if (numDays <= 0) {
+        printf("Invalid number of days. Please enter a valid number.\n");
+        return 1;
+    }
+
+    Timetable timetable[numDays];
+    generateTimetable(timetable, numDays);
+
+    printf("\nClass Attendance:\n");
+    for (int i = 0; i < numStudents; i++) {
+        printf("Student %d: %s (%s)\n", students[i].id, students[i].name, students[i].present == 1 ? "Present" : "Absent");
+    }
+
+    printf("\nTimetable:\n");
+    for (int i = 0; i < numDays; i++) {
+        printf("%s - %s: %s\n", timetable[i].day, timetable[i].time, timetable[i].subject);
+    }
+
+    return 0;
+}
